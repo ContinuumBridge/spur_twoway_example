@@ -1,0 +1,8 @@
+downloads
+.idea
+*.log
+*.log*
+*.swp
+tmp
+*.tmp
+venv/*
