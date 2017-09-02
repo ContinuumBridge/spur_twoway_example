@@ -7,6 +7,7 @@
 import json
 import time
 import sys
+import signal
 import os.path
 import logging
 import logging.handlers
@@ -19,8 +20,8 @@ CB_LOGGING_LEVEL        = "DEBUG"
  
 config = {
 "org": "adqdih",
-"auth-key": "a-adqdih-ledf1cloph",
-"auth-token": ")FvwxZWtT(@GpLE5&t",
+"auth-key": "a-adqdih-3igw2njxct",
+"auth-token": "vnd2lLIqFXPFBYbgAF",
 "screensetName": "Watson_Clean",
 "listName": "Test",
 "buttonName": "Button_703"
@@ -30,7 +31,11 @@ deviceTypeId            = config["screensetName"]
 deviceId                = config["listName"] + "-" + config["buttonName"]
 
 def watsonCallback(event):
-    print("{} event received from button {}, data: {}".format(event.event, event.device, json.dumps(event.data)))
+    data = json.dumps(event.data)
+    print("{} event received from button {}, data: {}".format(event.event, event.device, data))
+    commandData={"test_response" : "test"}
+    watsonClient.publishCommand(deviceTypeId, deviceId, "test", "json", commandData)
+    print("Successfully publishted update")
 
 try:
     #options = ibmiotf.application.ParseConfigFile(configFilePath)
@@ -49,10 +54,11 @@ except ibmiotf.ConnectionException as e:
 try:
     watsonClient.connect()
 except ibmiotf.ConnectionException as e:
-    print("Watson client connection or subscription exception: {}, organsiation: {}".format(e, watsonParams))
+    print("Unable to connect to Watson, exception: {}".format(e))
+    exit()
 
 watsonClient.deviceEventCallback = watsonCallback
 print("Watson client callback registered")
 watsonClient.subscribeToDeviceEvents(deviceType=deviceTypeId)
 print("Watson client subscribed to events")
-time.sleep(30)
+signal.pause()
