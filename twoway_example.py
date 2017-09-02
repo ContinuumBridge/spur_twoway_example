@@ -18,10 +18,11 @@ HOME                    = os.getcwd()
 CB_LOGFILE              = HOME + "/client.log"
 CB_LOGGING_LEVEL        = "DEBUG"
  
+#api watson={"org": "adqdih", "auth-key": "a-adqdih-ledf1cloph", "auth-token": ")FvwxZWtT(@GpLE5&t"}
 config = {
 "org": "adqdih",
-"auth-key": "a-adqdih-3igw2njxct",
-"auth-token": "vnd2lLIqFXPFBYbgAF",
+"auth-key": "a-adqdih-ledf1cloph",
+"auth-token": ")FvwxZWtT(@GpLE5&t",
 "screensetName": "Watson_Clean",
 "listName": "Test",
 "buttonName": "Button_703"
@@ -29,6 +30,8 @@ config = {
 
 deviceTypeId            = config["screensetName"]
 deviceId                = config["listName"] + "-" + config["buttonName"]
+
+print("deviceTypeId: {}, deviceId: {}".format(deviceTypeId, deviceId))
 
 def watsonCallback(event):
     data = json.dumps(event.data)
@@ -47,9 +50,12 @@ try:
         "auth-token": config["auth-token"]
     }
     watsonClient = ibmiotf.application.Client(options)
+    print("Created Watson client")
 except ibmiotf.ConnectionException as e:
     print("Watson Client creation exception: {}, organsiation: {}".format(e, watsonParams))
     exit()
+
+time.sleep(2)
 
 try:
     watsonClient.connect()
